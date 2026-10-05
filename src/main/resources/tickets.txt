@@ -1,0 +1,9 @@
+BUG|Login fails for new users|New users receive an error after submitting valid credentials|Akash|CRITICAL|OPEN|Priya|login,production,auth|HIGH|1. Open login page; 2. Enter valid credentials; 3. Click Login|0|N/A|N/A|N/A
+BUG|Dashboard loads slowly|Dashboard takes more than 8 seconds to load for some users|Rahul|HIGH|IN_PROGRESS||performance,dashboard|MEDIUM|1. Sign in; 2. Open dashboard; 3. Refresh twice|0|N/A|N/A|N/A
+BUG|Typo in help text|Minor spelling mistake in the password reset message|Meena|LOW|RESOLVED|Vikram|ui,documentation|LOW|1. Open password reset page; 2. Read help text|0|N/A|N/A|N/A
+FEATURE|Dark mode support|Add a dark theme for the helpdesk portal|Arun|MEDIUM|OPEN|Priya|ui,accessibility|N/A|N/A|28|Users have requested a dark theme to reduce eye strain|N/A|N/A
+FEATURE|Bulk ticket assignment|Allow managers to assign multiple tickets at once|Divya|HIGH|IN_PROGRESS|Sanjay|workflow,productivity|N/A|N/A|67|Bulk assignment will reduce repetitive manual work for the support team|N/A|N/A
+FEATURE|Export daily report|Allow CSV export of the end-of-day report|Kiran|LOW|CLOSED||reporting,export|N/A|N/A|6|Useful for sharing daily metrics with management|N/A|N/A
+ACCESS|Read-only database access|Request read-only access to the analytics database|Ravi|HIGH|OPEN|SecurityTeam|database,access|N/A|N/A|0|N/A|AnalyticsDB|Read
+ACCESS|Write access to staging system|Request write access for testing a deployment|Neha|MEDIUM|IN_PROGRESS|DevOps|staging,access|N/A|N/A|0|N/A|StagingServer|Write
+ACCESS|Production admin access|Request temporary administrator access for incident recovery|Suresh|CRITICAL|OPEN||production,privileged,incident|N/A|N/A|0|N/A|ProdCluster|Admin
