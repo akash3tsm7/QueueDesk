@@ -1,5 +1,6 @@
 package com.akash.queuedesk;
-import java.util.*;
+
+import java.util.Scanner;
 
 class QueueNumberSimulator {
     public static void main(String[] args) {

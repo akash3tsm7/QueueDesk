@@ -1,8 +1,12 @@
 package com.akash.queuedesk;
-import java.util.*;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 class TicketFileLoader{
     List<Ticket> load(String path) throws IOException, InvalidTicketDataException{
         List<Ticket> tickets = new ArrayList<>();
@@ -35,16 +39,16 @@ class TicketFileLoader{
                     String title = parts[1];
                     String description = parts[2];
                     String requester = parts[3];
-                    Ticket.Priority priority;
+                    Priority priority;
                     try {
-                        priority = Ticket.Priority.valueOf(parts[4]);
+                        priority = Priority.valueOf(parts[4]);
                     } 
                     catch (IllegalArgumentException e) {
                         throw new InvalidTicketDataException("lineNumber "+lineNumber+" "+"Invalid Priority: " + parts[4]);
                     }
-                    Ticket.Status status;
+                    Status status;
                     try {
-                        status = Ticket.Status.valueOf(parts[5]);
+                        status = Status.valueOf(parts[5]);
                     } 
                     catch (IllegalArgumentException e) {
                         throw new InvalidTicketDataException(lineNumber+"Invalid Status: " + parts[5]);

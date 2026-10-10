@@ -1,14 +1,15 @@
 package com.akash.queuedesk;
-import java.util.*;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.io.*;class TicketComparators {
+
+import java.util.Comparator;
+
+class TicketComparators {
 
     static Comparator<Ticket> BY_ASSIGNEE_THEN_PRIORITY =
-            Comparator.comparing((Ticket t) -> t.assignee,Comparator.nullsLast(Comparator.naturalOrder()))
-                      .thenComparing((Ticket t) -> t.currPriority);
+            Comparator.comparing((Ticket t) -> t.getAssignee(),Comparator.nullsLast(Comparator.naturalOrder()))
+                      .thenComparing((Ticket t) -> t.getPriority());
 
     static Comparator<Ticket> BY_STATUS_THEN_AGE =
-            Comparator.comparing((Ticket t) -> t.currStatus)
+            Comparator.comparing((Ticket t) -> t.getCurrStatus())
                       .thenComparing((Ticket t) -> t.ageInHours());
+
 }

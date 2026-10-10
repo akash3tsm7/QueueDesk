@@ -1,32 +1,12 @@
 package com.akash.queuedesk;
-import java.util.*;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.io.*;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 class QueueDesk {
-    static void printTriageBoard(List<Ticket> tickets){
-        for (Ticket ticket:tickets){
-            System.out.println("Estimated Effort: " + ticket.estimateEffortHours() + " hours");
-            System.out.println(ticket.toString());
-        }
-    }
-    static PriorityQueue<Ticket> naturalQueue=new PriorityQueue<>();
-    static PriorityQueue<Ticket> customQueue=new PriorityQueue<>(TicketComparators.BY_ASSIGNEE_THEN_PRIORITY);
-    void addToNaturalQueue(Ticket ticket) {
-        naturalQueue.offer(ticket);
-    }
 
-    void addToCustomQueue(Ticket ticket) {
-        customQueue.offer(ticket);
-    }
-
-    Ticket serveNatural() {
-        return naturalQueue.poll();
-    }
-
-    Ticket serveCustom() {
-        return customQueue.poll();
-    }
     static <T extends Ticket> T oldest(List<T> tickets){
         T oldestTicket=null;
         for(T ticket:tickets){
@@ -36,78 +16,194 @@ class QueueDesk {
         }
         return oldestTicket;
     }
-    public static void main(String args[]) throws IOException, InvalidTicketDataException{
-        TicketFileLoader loader=new TicketFileLoader();
-        List<Ticket> tickets=loader.load("src/main/resources/tickets.txt");
+
+    public static void main(String[] args)
+            throws IOException, InvalidTicketDataException {
+
+        // 1. Load tickets from the file
+        TicketFileLoader loader = new TicketFileLoader();
+
+        List<Ticket> tickets = loader.load("src/main/resources/tickets.txt");
+
         System.out.println("Tickets loaded: " + tickets.size());
-        printTriageBoard(tickets);
-        for(Ticket ticket:tickets){
-            if (ticket instanceof BugTicket b) {
-                System.out.println("Bug: " + b.getTitle());
-                System.out.println(b.severity);
-                System.out.println(b.stepsToReproduce);
+
+        // 2. Display the triage board
+        System.out.println("\n========== TRIAGE BOARD ==========");
+        TriageBoard.printTriageBoard(tickets);
+
+        // 3. Demonstrate polymorphism and subclass-specific fields
+        System.out.println("\n========== TICKET DETAILS ==========");
+
+        for (Ticket ticket : tickets) {
+
+            if (ticket instanceof BugTicket bug) {
+                System.out.println("Bug: " + bug.getTitle());
+                System.out.println("Severity: " + bug.getSeverity());
+                System.out.println("Steps to reproduce: "
+                        + bug.getStepsToReproduce());
             }
-            else if(ticket instanceof FeatureRequestTicket f){
-                System.out.println("Feature: " + f.getTitle());
-                System.out.println(f.votes);
-                System.out.println(f.businessJustification);
+            else if (ticket instanceof FeatureRequestTicket feature) {
+                System.out.println("Feature: " + feature.getTitle());
+                System.out.println("Votes: " + feature.getVotes());
+                System.out.println("Business justification: "
+                        + feature.getBusinessJustification());
             }
-            else if(ticket instanceof AccessRequestTicket a){
-                System.out.println("Access: " + a.getTitle());
-                System.out.println(a.systemName);
-                System.out.println(a.accessLevel);
+            else if (ticket instanceof AccessRequestTicket access) {
+                System.out.println("Access: " + access.getTitle());
+                System.out.println("System: " + access.getSystemName());
+                System.out.println("Access level: " + access.getAccessLevel());
             }
+
+            System.out.println();
         }
-        for(Ticket t:tickets){
-            System.out.print(t.currPriority+" ");
-            System.out.print(t.getCreatedAt()+" ");
+
+        // 4. Display the original priority and creation-time order
+        System.out.println("\n========== ORIGINAL ORDER ==========");
+
+        for (Ticket ticket : tickets) {
+            System.out.println(
+                    ticket.getPriority() + " - " + ticket.getCreatedAt());
         }
-        System.out.println();
+
+        // 5. Sort using Ticket's natural ordering
+        // Priority descending, then creation time ascending
         Collections.sort(tickets);
-        for(Ticket t:tickets){
-            System.out.print(t.currPriority+" ");
-            System.out.print(t.getCreatedAt()+" ");
+
+        System.out.println("\n========== NATURAL ORDER ==========");
+
+        for (Ticket ticket : tickets) {
+            System.out.println(
+                    ticket.getPriority() + " - " + ticket.getCreatedAt());
         }
-        for(Ticket t:tickets){
-            System.out.print(t.assignee+" ");
-            System.out.print(t.getPriority()+" ");
+
+        // 6. Sort using the custom assignee-then-priority comparator
+        tickets.sort(TicketComparators.BY_ASSIGNEE_THEN_PRIORITY);
+
+        System.out.println("\n========== ASSIGNEE THEN PRIORITY ==========");
+
+        for (Ticket ticket : tickets) {
+            System.out.println(
+                    ticket.getAssignee() + " - " + ticket.getPriority());
         }
-        System.out.println();
-        Collections.sort(tickets,TicketComparators.BY_ASSIGNEE_THEN_PRIORITY);
-        for(Ticket t:tickets){
-            System.out.print(t.assignee+" ");
-            System.out.print(t.getPriority()+" ");
+
+        // 7. Sort using the custom assignee-then-priority comparator
+        tickets.sort(TicketComparators.BY_STATUS_THEN_AGE);
+
+        System.out.println("\n========== STATUS THEN AGE ==========");
+
+        for (Ticket ticket : tickets) {
+            System.out.println(
+                    ticket.getCurrStatus() + " - " + ticket.ageInHours());
         }
-        Repository<Ticket> r=new Repository();
-        for(Ticket t:tickets){
-            r.add(t);
+
+        // 8. Repository: store mixed ticket types
+        Repository<Ticket> repository = new Repository<>();
+
+        for (Ticket ticket : tickets) {
+            repository.add(ticket);
         }
-        System.out.println(r.all().toString());
-        Map<String,List<Ticket>> m=r.groupByAssignee();
-        for(Map.Entry<String,List<Ticket>> entry:m.entrySet()){
-            System.out.print(entry.getKey()+"-");
-            System.out.print(entry.getValue().toString());
-            System.out.println();
+
+        System.out.println("\n========== ALL REPOSITORY TICKETS ==========");
+        System.out.println(repository.all());
+
+        // 9. Group tickets by assignee
+        System.out.println("\n========== GROUPED BY ASSIGNEE ==========");
+
+        Map<String, List<Ticket>> groupedTickets =
+                repository.groupByAssignee();
+
+        for (Map.Entry<String, List<Ticket>> entry
+                : groupedTickets.entrySet()) {
+
+            System.out.println(entry.getKey() + " - " + entry.getValue());
         }
-        for(Ticket t:tickets){
-            naturalQueue.offer(t);
+
+
+        // 10. Find a ticket by ID
+        System.out.println("\n========== FIND TICKET ==========");
+
+        if (!tickets.isEmpty()) {
+            int existingId = tickets.get(0).getId();
+
+            System.out.println(
+                    "Found ticket: " + repository.findById(existingId));
         }
-        while(!naturalQueue.isEmpty()){
-            Ticket temp=naturalQueue.poll();
-            System.out.println(temp.getPriority()+"-"+temp.getCreatedAt());
-            System.out.println();
+
+        // 11. Demonstrate natural priority queue
+        System.out.println("\n========== NATURAL PRIORITY QUEUE ==========");
+
+        TicketTriageQueue triageQueue = new TicketTriageQueue();
+
+        for (Ticket ticket : tickets) {
+            triageQueue.addToNaturalQueue(ticket);
+        }
+
+        Ticket current;
+
+        while ((current = triageQueue.serveNextNatural()) != null) {
+            System.out.println(
+                    current.getPriority() + " - " + current.getCreatedAt());
+        }
+
+        // 12. Demonstrate custom priority queue
+        System.out.println("\n========== CUSTOM PRIORITY QUEUE ==========");
+
+        for (Ticket ticket : tickets) {
+            triageQueue.addToCustomQueue(ticket);
+        }
+
+        while ((current = triageQueue.serveNextCustom()) != null) {
+            System.out.println(
+                    current.getAssignee() + " - " + current.getPriority());
+        }
+
+        // 13. Find the oldest ticket
+        System.out.println("\n========== OLDEST TICKET ==========");
+
+        Ticket oldestTicket = oldest(tickets);
+
+        if (oldestTicket != null) {
+            System.out.println(oldestTicket);
+        } else {
+            System.out.println("No tickets available.");
+        }
+
+        // 14. Demonstrate escalation for supported ticket types
+        System.out.println("\n========== ESCALATION ==========");
+
+        for (Ticket ticket : tickets) {
+            if (ticket instanceof Escalatable escalatable) {
+                System.out.println(ticket.getTitle() + " - " + escalatable.escalationBadge() + " - Level: " + escalatable.escalationLevel());
+            }
+        }
+
+        // 15. Demonstrate description validation
+        System.out.println("\n========== DESCRIPTION VALIDATION ==========");
+
+        if (!tickets.isEmpty()) {
+            Ticket ticket = tickets.get(0);
+
+            ticket.setDescription("  Updated test description  ");
+            System.out.println(
+                    "Trimmed description: " + ticket.getDescription());
+
+            try {
+                ticket.setDescription("   ");
+            } catch (IllegalArgumentException exception) {
+                System.out.println(
+                        "Blank description rejected: " + exception.getMessage());
+            }
 
         }
-        System.out.println("Custom-Queue");
-        for(Ticket t:tickets){
-            customQueue.offer(t);
-        }
-        while(!customQueue.isEmpty()){
-            Ticket temp=customQueue.poll();
-            System.out.println(temp.assignee+"-"+temp.getPriority());
-            System.out.println();
-        }
-        System.out.println(oldest(tickets));
-        
+
+        // 16. Display total tickets created
+        System.out.println("\n========== TICKET STATISTICS ==========");
+        System.out.println("Tickets loaded: " + tickets.size());
+        System.out.println("Total tickets created: " + Ticket.totalCreated());
+
+        //17. Report Generation
+        TicketReport report = new TicketReport();
+        report.reportGenerator(tickets);
+
     }
 }
