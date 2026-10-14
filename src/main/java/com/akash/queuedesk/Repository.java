@@ -30,15 +30,7 @@ class Repository<T extends Ticket>{
     Map<String, List<T>> groupByAssignee(){
         Map<String,List<T>> ticketsByAssignee=new HashMap();
         for(T ticket:tickets){
-            String assignee=ticket.getAssignee();
-            if(ticketsByAssignee.containsKey(assignee)){
-                ticketsByAssignee.get(assignee).add(ticket);
-            }
-            else{
-                List<T> assigneeTickets=new ArrayList<>();
-                assigneeTickets.add(ticket);
-                ticketsByAssignee.put(assignee,assigneeTickets);
-            }
+            ticketsByAssignee.computeIfAbsent(ticket.getAssignee(),k->new ArrayList<>()).add(ticket);
         }
         return ticketsByAssignee;
     }

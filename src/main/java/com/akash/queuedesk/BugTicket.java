@@ -1,11 +1,11 @@
 package com.akash.queuedesk;
 
 class BugTicket extends Ticket implements Escalatable{
+
     enum Severity{ LOW, MEDIUM, HIGH};
     private Severity severity;
     private String stepsToReproduce;
-    private boolean escalated=false;
-    private int escalateLevel=0;
+    private EscalatableSupport escalationSupport = new EscalatableSupport();
 
     BugTicket(String title,String description,String requester,Priority priority,Severity severity,String stepsToReproduce){
         super(title, description, requester, priority);
@@ -37,17 +37,16 @@ class BugTicket extends Ticket implements Escalatable{
 
     @Override
     public void escalate(){
-        escalated=true;
-        escalateLevel++;
+        escalationSupport.escalate();
     }
 
     @Override
     public boolean isEscalated(){
-        return escalated;
+        return escalationSupport.isEscalated();
     }
 
     @Override
     public int escalationLevel(){
-        return escalateLevel;
+        return escalationSupport.escalationLevel();
     }
 }

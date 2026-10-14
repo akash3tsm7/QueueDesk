@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 abstract class Ticket implements Comparable<Ticket>{
+
     private int id;
     private String title;
     private String description;
@@ -26,12 +27,15 @@ abstract class Ticket implements Comparable<Ticket>{
         this.status=Status.OPEN;
         this.createdAt=LocalDateTime.now();
     }
+
     Ticket(String title,String requester){
         this(title,"",requester,Priority.MEDIUM);
     }
+
     long ageInHours(){
         return ChronoUnit.HOURS.between(createdAt,LocalDateTime.now());
     }
+
     static int totalCreated(){
         return nextId-1;
     }
@@ -64,32 +68,33 @@ abstract class Ticket implements Comparable<Ticket>{
     }
 
     void setDescription(String description) {
-        if (description == null || description.isBlank()) {
-            throw new IllegalArgumentException(
-                    "Description cannot be null or blank"
-            );
-        }
-
+        validateDescription(description);
         this.description = description.trim();
     }
-    public void setPriority(Priority priority) {
-        if (priority == null) {
-            throw new IllegalArgumentException(
-                    "Priority cannot be null"
-            );
-        }
 
+    private void validateDescription(String description) {
+        if (description == null || description.isBlank()) {
+            throw new IllegalArgumentException("Description cannot be null or blank");
+        }
+    }
+
+
+    public void setPriority(Priority priority) {
+        validateNotNull(priority, "Priority");
         this.priority = priority;
     }
-    public void setStatus(Status status) {
-        if (status == null) {
-            throw new IllegalArgumentException(
-                    "Status cannot be null"
-            );
-        }
 
+    public void setStatus(Status status) {
+        validateNotNull(status, "Status");
         this.status = status;
     }
+
+    private void validateNotNull(Object value, String fieldName) {
+        if (value == null) {
+            throw new IllegalArgumentException(fieldName + " cannot be null");
+        }
+    }
+
     void setAssignee(String assignee){
         this.assignee=assignee;
     }
@@ -112,9 +117,9 @@ abstract class Ticket implements Comparable<Ticket>{
 
     @Override
     public int compareTo(Ticket other){
-        if(this.priority==other.priority){
+        if(this.priority.getRank()==other.priority.getRank()){
             return this.createdAt.compareTo(other.createdAt);
         }
-        return other.priority.compareTo(this.priority);
+        return Integer.compare(other.getPriority().getRank(), this.getPriority().getRank());
     }
 }

@@ -4,8 +4,8 @@ class AccessRequestTicket extends Ticket implements Escalatable{
 
     private String systemName;
     private String accessLevel;
-    private boolean escalated=false;
-    private int escalateLevel=0;
+    private EscalatableSupport escalationSupport = new EscalatableSupport();
+
 
     String getSystemName(){
         return this.systemName;
@@ -31,17 +31,16 @@ class AccessRequestTicket extends Ticket implements Escalatable{
 
     @Override
     public void escalate(){
-        escalated=true;
-        escalateLevel++;
+        escalationSupport.escalate();
     }
 
     @Override
     public boolean isEscalated(){
-        return escalated;
+        return escalationSupport.isEscalated();
     }
 
     @Override
     public int escalationLevel(){
-        return escalateLevel;
+        return escalationSupport.escalationLevel();
     }
 }

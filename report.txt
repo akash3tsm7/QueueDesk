@@ -1,19 +1,19 @@
 ========== END-OF-DAY SUMMARY ==========
 
 Status Summary:
-IN_PROGRESS: 3
 RESOLVED: 1
 OPEN: 4
 CLOSED: 1
+IN_PROGRESS: 3
 
 Priority Summary:
-MEDIUM: 2
-LOW: 2
-CRITICAL: 2
 HIGH: 3
+MEDIUM: 2
+CRITICAL: 2
+LOW: 2
 
 Oldest OPEN Ticket:
-Ticket{id=1, title='Login fails for new users', description='New users receive an error after submitting valid credentials', requester='Akash', priority=CRITICAL, status=OPEN, createdAt=2026-10-11T11:59:30.049198072}
+Ticket{id=1, title='Login fails for new users', description='New users receive an error after submitting valid credentials', requester='Akash', priority=CRITICAL, status=OPEN, createdAt=2026-10-14T23:10:06.544674001}
 
 Overdue CRITICAL Tickets:
 No overdue critical tickets.
