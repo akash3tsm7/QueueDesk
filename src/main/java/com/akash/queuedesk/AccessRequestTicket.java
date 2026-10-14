@@ -15,8 +15,8 @@ class AccessRequestTicket extends Ticket implements Escalatable{
         return this.accessLevel;
     }
 
-    AccessRequestTicket(String title,String description,String requester, Priority p,String systemName, String accessLevel){
-        super(title, description, requester, p);
+    AccessRequestTicket(String title,String description,String requester, Priority priority,String systemName, String accessLevel){
+        super(title, description, requester, priority);
         this.systemName = systemName;
         this.accessLevel = accessLevel;
     }

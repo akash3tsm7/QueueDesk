@@ -93,7 +93,7 @@ class QueueDesk {
 
         for (Ticket ticket : tickets) {
             System.out.println(
-                    ticket.getCurrStatus() + " - " + ticket.ageInHours());
+                    ticket.getStatus() + " - " + ticket.ageInHours());
         }
 
         // 8. Repository: store mixed ticket types
@@ -138,11 +138,11 @@ class QueueDesk {
             triageQueue.addToNaturalQueue(ticket);
         }
 
-        Ticket current;
+        Ticket currentTicket;
 
-        while ((current = triageQueue.serveNextNatural()) != null) {
+        while ((currentTicket = triageQueue.serveNextNatural()) != null) {
             System.out.println(
-                    current.getPriority() + " - " + current.getCreatedAt());
+                    currentTicket.getPriority() + " - " + currentTicket.getCreatedAt());
         }
 
         // 12. Demonstrate custom priority queue
@@ -152,9 +152,9 @@ class QueueDesk {
             triageQueue.addToCustomQueue(ticket);
         }
 
-        while ((current = triageQueue.serveNextCustom()) != null) {
+        while ((currentTicket = triageQueue.serveNextCustom()) != null) {
             System.out.println(
-                    current.getAssignee() + " - " + current.getPriority());
+                    currentTicket.getAssignee() + " - " + currentTicket.getPriority());
         }
 
         // 13. Find the oldest ticket
@@ -203,7 +203,7 @@ class QueueDesk {
 
         //17. Report Generation
         TicketReport report = new TicketReport();
-        report.reportGenerator(tickets);
+        report.generateReport(tickets);
 
     }
 }

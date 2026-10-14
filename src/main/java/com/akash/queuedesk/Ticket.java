@@ -12,17 +12,18 @@ abstract class Ticket implements Comparable<Ticket>{
     private String requester;
     private String assignee=null;
     private Set<String> tags=new HashSet<>();
-    private Priority currPriority;
-    private Status currStatus;
+    private Priority priority;
+    private Status status;
     private LocalDateTime createdAt;
     private static int nextId=1;
+
     Ticket(String title,String description,String requester,Priority priority){
         this.id=nextId++;
         this.title=title;
         this.description=description;
         this.requester=requester;
-        this.currPriority=priority;
-        this.currStatus=Status.OPEN;
+        this.priority=priority;
+        this.status=Status.OPEN;
         this.createdAt=LocalDateTime.now();
     }
     Ticket(String title,String requester){
@@ -53,10 +54,10 @@ abstract class Ticket implements Comparable<Ticket>{
         return this.assignee;
     }
     Priority getPriority() {
-        return this.currPriority;
+        return this.priority;
     }
-    Status getCurrStatus() {
-        return this.currStatus;
+    Status getStatus() {
+        return this.status;
     }
     LocalDateTime getCreatedAt() {
         return this.createdAt;
@@ -78,7 +79,7 @@ abstract class Ticket implements Comparable<Ticket>{
             );
         }
 
-        this.currPriority = priority;
+        this.priority = priority;
     }
     public void setStatus(Status status) {
         if (status == null) {
@@ -87,7 +88,7 @@ abstract class Ticket implements Comparable<Ticket>{
             );
         }
 
-        this.currStatus = status;
+        this.status = status;
     }
     void setAssignee(String assignee){
         this.assignee=assignee;
@@ -103,17 +104,17 @@ abstract class Ticket implements Comparable<Ticket>{
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", requester='" + requester + '\'' +
-                ", priority=" + currPriority +
-                ", status=" + currStatus +
+                ", priority=" + priority +
+                ", status=" + status +
                 ", createdAt=" + createdAt +
                 '}';
     }
 
     @Override
     public int compareTo(Ticket other){
-        if(this.currPriority==other.currPriority){
+        if(this.priority==other.priority){
             return this.createdAt.compareTo(other.createdAt);
         }
-        return other.currPriority.compareTo(this.currPriority);
+        return other.priority.compareTo(this.priority);
     }
 }

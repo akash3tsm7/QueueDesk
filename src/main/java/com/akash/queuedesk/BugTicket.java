@@ -7,8 +7,8 @@ class BugTicket extends Ticket implements Escalatable{
     private boolean escalated=false;
     private int escalateLevel=0;
 
-    BugTicket(String title,String description,String requester,Priority p,Severity severity,String stepsToReproduce){
-        super(title, description, requester, p);
+    BugTicket(String title,String description,String requester,Priority priority,Severity severity,String stepsToReproduce){
+        super(title, description, requester, priority);
         this.severity = severity;
         this.stepsToReproduce = stepsToReproduce;
     }

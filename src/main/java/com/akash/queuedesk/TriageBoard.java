@@ -11,12 +11,12 @@ public class TriageBoard {
 
             System.out.println(ticket);
 
-            if (ticket instanceof Escalatable e) {
+            if (ticket instanceof Escalatable escalatable) {
                 System.out.println("Escalation: "
-                        + e.escalationBadge());
+                        + escalatable.escalationBadge());
 
                 System.out.println("Escalation Level: "
-                        + e.escalationLevel());
+                        + escalatable.escalationLevel());
             }
         }
     }

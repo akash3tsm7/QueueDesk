@@ -9,7 +9,7 @@ class TicketComparators {
                       .thenComparing((Ticket t) -> t.getPriority());
 
     static Comparator<Ticket> BY_STATUS_THEN_AGE =
-            Comparator.comparing((Ticket t) -> t.getCurrStatus())
+            Comparator.comparing((Ticket t) -> t.getStatus())
                       .thenComparing((Ticket t) -> t.ageInHours());
 
 }

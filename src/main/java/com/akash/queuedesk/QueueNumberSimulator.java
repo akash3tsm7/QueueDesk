@@ -14,16 +14,11 @@ class QueueNumberSimulator {
         int vipCount = 0;
         int priorityRecheckCount = 0;
 
-        for (int customerIndex = 0;
-             customerIndex < customerCount;
-             customerIndex++) {
+        for (int customerIndex = 0; customerIndex < customerCount; customerIndex++) {
 
             int currentTicketNumber = startTicketNumber + customerIndex;
 
-            System.out.printf(
-                    "Now serving ticket #%d%n",
-                    currentTicketNumber
-            );
+            System.out.printf("Now serving ticket #%d%n", currentTicketNumber);
 
             totalServed++;
 

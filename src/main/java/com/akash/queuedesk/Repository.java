@@ -28,19 +28,19 @@ class Repository<T extends Ticket>{
     }
 
     Map<String, List<T>> groupByAssignee(){
-        Map<String,List<T>> m=new HashMap();
+        Map<String,List<T>> ticketsByAssignee=new HashMap();
         for(T ticket:tickets){
             String assignee=ticket.getAssignee();
-            if(m.containsKey(assignee)){
-                m.get(assignee).add(ticket);
+            if(ticketsByAssignee.containsKey(assignee)){
+                ticketsByAssignee.get(assignee).add(ticket);
             }
             else{
-                List<T> l=new ArrayList<>();
-                l.add(ticket);
-                m.put(assignee,l);  
+                List<T> assigneeTickets=new ArrayList<>();
+                assigneeTickets.add(ticket);
+                ticketsByAssignee.put(assignee,assigneeTickets);
             }
         }
-        return m;
+        return ticketsByAssignee;
     }
 
 }
