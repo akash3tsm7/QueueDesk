@@ -1,6 +1,6 @@
-package com.akash.queuedesk;
+package com.akash.queuedesk.model;
 
-interface Escalatable{
+public interface Escalatable{
 
     void escalate();
 

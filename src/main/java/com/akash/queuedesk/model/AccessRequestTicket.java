@@ -1,24 +1,23 @@
-package com.akash.queuedesk;
+package com.akash.queuedesk.model;
 
-class AccessRequestTicket extends Ticket implements Escalatable{
+public class AccessRequestTicket extends Ticket implements Escalatable{
 
     private String systemName;
     private String accessLevel;
     private EscalatableSupport escalationSupport = new EscalatableSupport();
 
-
-    String getSystemName(){
-        return this.systemName;
-    }
-
-    String getAccessLevel(){
-        return this.accessLevel;
-    }
-
-    AccessRequestTicket(String title,String description,String requester, Priority priority,String systemName, String accessLevel){
+    public AccessRequestTicket(String title,String description,String requester, Priority priority,String systemName, String accessLevel){
         super(title, description, requester, priority);
         this.systemName = systemName;
         this.accessLevel = accessLevel;
+    }
+
+    public String getSystemName(){
+        return this.systemName;
+    }
+
+    public String getAccessLevel(){
+        return this.accessLevel;
     }
 
     @Override

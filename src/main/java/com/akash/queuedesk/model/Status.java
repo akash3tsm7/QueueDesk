@@ -1,6 +1,7 @@
-package com.akash.queuedesk;
+package com.akash.queuedesk.model;
 
-enum Status{
+public enum Status{
+
     OPEN(1),
     IN_PROGRESS(2),
     RESOLVED(3),
@@ -15,6 +16,5 @@ enum Status{
     public int getRank(){
         return this.rank;
     }
-
 
 }

@@ -1,23 +1,22 @@
-package com.akash.queuedesk;
+package com.akash.queuedesk.model;
 
-class BugTicket extends Ticket implements Escalatable{
+public class BugTicket extends Ticket implements Escalatable{
 
-    enum Severity{ LOW, MEDIUM, HIGH};
     private Severity severity;
     private String stepsToReproduce;
     private EscalatableSupport escalationSupport = new EscalatableSupport();
 
-    BugTicket(String title,String description,String requester,Priority priority,Severity severity,String stepsToReproduce){
+    public BugTicket(String title,String description,String requester,Priority priority,Severity severity,String stepsToReproduce){
         super(title, description, requester, priority);
         this.severity = severity;
         this.stepsToReproduce = stepsToReproduce;
     }
 
-    Severity getSeverity(){
+    public Severity getSeverity(){
         return this.severity;
     }
 
-    String getStepsToReproduce(){
+    public String getStepsToReproduce(){
         return this.stepsToReproduce;
     }
 

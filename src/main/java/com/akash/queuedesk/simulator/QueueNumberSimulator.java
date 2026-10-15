@@ -1,8 +1,9 @@
-package com.akash.queuedesk;
+package com.akash.queuedesk.simulator;
 
 import java.util.Scanner;
 
 class QueueNumberSimulator {
+
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
@@ -37,6 +38,5 @@ class QueueNumberSimulator {
         System.out.println("Total VIP: " + vipCount);
         System.out.println("Total priority-recheck: " + priorityRecheckCount);
 
-        sc.close();
     }
 }

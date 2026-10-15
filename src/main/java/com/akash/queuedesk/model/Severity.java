@@ -1,13 +1,14 @@
-package com.akash.queuedesk;
+package com.akash.queuedesk.model;
 
-public enum Priority{
+public enum Severity{
+
     LOW(1),
     MEDIUM(2),
-    HIGH(3),
-    CRITICAL(4);
+    HIGH(3);
+
     private int rank;
 
-    Priority(int rank){
+    Severity(int rank){
         this.rank = rank;
     }
 
@@ -15,6 +16,3 @@ public enum Priority{
         return this.rank;
     }
 }
-
-
-

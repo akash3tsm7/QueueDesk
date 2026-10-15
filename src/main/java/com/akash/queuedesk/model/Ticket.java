@@ -1,11 +1,11 @@
-package com.akash.queuedesk;
+package com.akash.queuedesk.model;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
 
-abstract class Ticket implements Comparable<Ticket>{
+public abstract class Ticket implements Comparable<Ticket>{
 
     private int id;
     private String title;
@@ -32,42 +32,49 @@ abstract class Ticket implements Comparable<Ticket>{
         this(title,"",requester,Priority.MEDIUM);
     }
 
-    long ageInHours(){
+    public long ageInHours(){
         return ChronoUnit.HOURS.between(createdAt,LocalDateTime.now());
     }
 
-    static int totalCreated(){
+    public static int totalCreated(){
         return nextId-1;
     }
 
-    abstract double estimateEffortHours();
+    public abstract double estimateEffortHours();
 
-    int getId() {
+    public int getId() {
         return this.id;
     }
-    String getTitle() {
+
+    public String getTitle() {
         return this.title;
     }
-    String getDescription() {
+
+    public String getDescription() {
         return this.description;
     }
+
     String getRequester(){
         return this.requester;
     }
-    String getAssignee(){
+
+    public String getAssignee(){
         return this.assignee;
     }
-    Priority getPriority() {
+
+    public Priority getPriority() {
         return this.priority;
     }
-    Status getStatus() {
+
+    public Status getStatus() {
         return this.status;
     }
-    LocalDateTime getCreatedAt() {
+
+    public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }
 
-    void setDescription(String description) {
+    public void setDescription(String description) {
         validateDescription(description);
         this.description = description.trim();
     }
@@ -78,8 +85,7 @@ abstract class Ticket implements Comparable<Ticket>{
         }
     }
 
-
-    public void setPriority(Priority priority) {
+    void setPriority(Priority priority) {
         validateNotNull(priority, "Priority");
         this.priority = priority;
     }
@@ -95,10 +101,11 @@ abstract class Ticket implements Comparable<Ticket>{
         }
     }
 
-    void setAssignee(String assignee){
+    public void setAssignee(String assignee){
         this.assignee=assignee;
     }
-    void setTags(Set<String> tags){
+
+    public void setTags(Set<String> tags){
         this.tags=tags;
     }
 
@@ -122,4 +129,5 @@ abstract class Ticket implements Comparable<Ticket>{
         }
         return Integer.compare(other.getPriority().getRank(), this.getPriority().getRank());
     }
+
 }

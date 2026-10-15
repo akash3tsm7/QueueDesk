@@ -1,4 +1,4 @@
-package com.akash.queuedesk;
+package com.akash.queuedesk.io;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -6,12 +6,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.akash.queuedesk.model.Ticket;
+import com.akash.queuedesk.model.Status;
+import com.akash.queuedesk.model.Priority;
 
-class TicketReport {
+public class TicketReport {
 
     private static final long CRITICAL_OVERDUE_HOURS = 24;
 
-    void generateReport(List<Ticket> tickets) {
+    public void generateReport(List<Ticket> tickets) {
 
         String reportContent = buildReportContent(tickets);
         writeReportToFile(reportContent);
@@ -113,4 +116,5 @@ class TicketReport {
 
         return ticket.getPriority() == Priority.CRITICAL && status != Status.RESOLVED && status != Status.CLOSED && ticket.ageInHours() >= CRITICAL_OVERDUE_HOURS;
     }
+
 }

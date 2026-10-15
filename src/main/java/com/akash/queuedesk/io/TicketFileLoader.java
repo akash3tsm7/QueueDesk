@@ -1,4 +1,4 @@
-package com.akash.queuedesk;
+package com.akash.queuedesk.io;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -6,9 +6,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import com.akash.queuedesk.exception.InvalidTicketDataException;
+import com.akash.queuedesk.model.Ticket;
+import com.akash.queuedesk.model.Priority;
+import com.akash.queuedesk.model.Status;
+import com.akash.queuedesk.model.Severity;
+import com.akash.queuedesk.model.BugTicket;
+import com.akash.queuedesk.model.FeatureRequestTicket;
+import com.akash.queuedesk.model.AccessRequestTicket;
 
-class TicketFileLoader{
-    List<Ticket> load(String path) throws IOException, InvalidTicketDataException {
+public class TicketFileLoader{
+
+    public List<Ticket> load(String path) throws IOException, InvalidTicketDataException {
         List<Ticket> tickets = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             collectTicketsFromReader(reader, tickets);
@@ -99,7 +108,7 @@ class TicketFileLoader{
         switch(type.toUpperCase()){
             case "BUG":
 
-                BugTicket.Severity severity = BugTicket.Severity.valueOf(fields[8]);
+                Severity severity = Severity.valueOf(fields[8]);
                 String stepsToReproduce = fields[9];
 
                 return new BugTicket(title, description, requester, priority, severity, stepsToReproduce);
@@ -132,4 +141,5 @@ class TicketFileLoader{
             }
         }
     }
+
 }

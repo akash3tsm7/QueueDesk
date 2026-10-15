@@ -1,4 +1,4 @@
-package com.akash.queuedesk;
+package com.akash.queuedesk.model;
 
 public class EscalatableSupport {
 
