@@ -1,10 +1,6 @@
 package com.akash.queuedesk.repository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.akash.queuedesk.model.Ticket;
 import com.akash.queuedesk.exception.TicketNotFoundException;
@@ -28,6 +24,12 @@ public class Repository<T extends Ticket>{
             }
         }
         throw new TicketNotFoundException(id);
+    }
+
+    public Optional<T> findByIdSafe(int id) {
+        return tickets.stream()
+                .filter(ticket -> ticket.getId() == id)
+                .findFirst();
     }
 
     public Map<String, List<T>> groupByAssignee(){

@@ -1,18 +1,20 @@
 package com.akash.queuedesk.model;
 
-public enum Severity{
+public enum TicketStatus {
 
-    LOW(1),
-    MEDIUM(2),
-    HIGH(3);
+    OPEN(1),
+    IN_PROGRESS(2),
+    RESOLVED(3),
+    CLOSED(4);
 
     private int rank;
 
-    Severity(int rank){
+    TicketStatus(int rank){
         this.rank = rank;
     }
 
     public int getRank(){
         return this.rank;
     }
+
 }

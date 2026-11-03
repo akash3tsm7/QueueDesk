@@ -2,10 +2,15 @@ package com.akash.queuedesk;
 
 import java.io.IOException;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.akash.queuedesk.analytics.TicketAnalytics;
+import com.akash.queuedesk.exception.TicketNotFoundException;
+import com.akash.queuedesk.io.TicketJsonStore;
 import com.akash.queuedesk.model.Ticket;
 import com.akash.queuedesk.model.BugTicket;
 import com.akash.queuedesk.model.FeatureRequestTicket;
@@ -24,17 +29,24 @@ import com.akash.queuedesk.triage.TicketTriageQueue;
 
 import com.akash.queuedesk.comparator.TicketComparators;
 
-
 class QueueDesk {
 
-    public static void main(String[] args) {
+    private static final Path JSON_STORE = Path.of("tickets.json");
+
+    private static final String LEGACY_TXT = "src/main/resources/tickets_complex.txt";
+
+    public static void main(String[] args) throws Exception {
 
         try {
-            List<Ticket> tickets = loadTickets("src/main/resources/tickets_complex.txt");
+            List<Ticket> tickets = loadTickets();
+            demonstrateTicketAnalytics(tickets);
+            Repository<Ticket> repository = buildRepository(tickets);
+            demonstrateSafeFindById(repository,tickets);
+            demonstrateJsonSaveAndLoad(tickets);
+
             demonstrateTriageBoard(tickets);
             demonstrateTicketDetails(tickets);
             demonstrateOrdering(tickets);
-            Repository<Ticket> repository = buildRepository(tickets);
             demonstrateRepository(repository, tickets);
             demonstrateTriageQueues(tickets);
             demonstrateOldestTicket(tickets);
@@ -46,15 +58,150 @@ class QueueDesk {
         catch (IOException | InvalidTicketDataException e) {
             System.err.println("Fatal error: " + e.getMessage());
         }
+
     }
 
-    private static List<Ticket> loadTickets(String path) throws IOException, InvalidTicketDataException {
+    private static List<Ticket> loadTickets() throws IOException, InvalidTicketDataException {
 
-        List<Ticket> tickets = new TicketFileLoader().load(path);
+        List<Ticket> tickets;
+
+        if (Files.exists(JSON_STORE)) {
+
+            System.out.println("Loading tickets from JSON: " + JSON_STORE);
+
+            tickets = TicketJsonStore.load(JSON_STORE);
+
+        }
+        else{
+
+            System.out.println("Migrating legacy tickets: " + LEGACY_TXT);
+
+            tickets = TicketFileLoader.load(LEGACY_TXT);
+
+            TicketJsonStore.save(tickets, JSON_STORE);
+
+            System.out.println("Migration complete. Saved " + tickets.size() + " tickets to " + JSON_STORE);
+
+        }
 
         System.out.println("Tickets loaded: " + tickets.size());
 
         return tickets;
+
+    }
+
+    private static void demonstrateTicketAnalytics(List<Ticket> tickets){
+
+        System.out.println("\n========== TICKET ANALYTICS ==========");
+
+        System.out.println("\n--- Count By Priority ---");
+
+        TicketAnalytics.countByPriority(tickets)
+                .forEach((priority, count) ->
+                        System.out.println(priority + " : " + count));
+
+        System.out.println("\n--- Group By Assignee ---");
+
+        TicketAnalytics.groupByAssignee(tickets)
+                .forEach((assignee, groupedTickets) ->
+                        System.out.println(assignee + " : "
+                                + groupedTickets.size() + " tickets"));
+
+        System.out.println("\n--- Average Effort Hours ---");
+
+        double average = TicketAnalytics.averageEffortHours(tickets);
+
+        System.out.println("Average effort: " + average + " hours");
+
+        System.out.println("\n--- Total Effort Hours ---");
+
+        double loopTotal = 0.0;
+
+        for (Ticket ticket : tickets) {
+            loopTotal += ticket.estimateEffortHours();
+        }
+
+        double streamTotal = TicketAnalytics.totalEffortHours(tickets);
+
+        System.out.println("Loop total: " + loopTotal);
+        System.out.println("Stream total: " + streamTotal);
+
+        System.out.println("\n--- Oldest Open Ticket ---");
+
+        TicketAnalytics.oldestOpenTicket(tickets)
+                .ifPresentOrElse(
+                        ticket -> System.out.println("Oldest: " + ticket),
+                        () -> System.out.println("No open tickets found")
+                );
+
+        System.out.println("\n--- Tag Line ---");
+
+        String tags = TicketAnalytics.tagLine(tickets);
+
+        System.out.println("All tags: " + tags);
+
+    }
+
+    private static void demonstrateSafeFindById(Repository<Ticket> repository, List<Ticket> tickets) {
+
+        System.out.println("\n========== SAFE FIND BY ID ==========");
+
+        if (tickets.isEmpty()) {
+            System.out.println("No tickets available.");
+            return;
+        }
+
+        int existingId = tickets.get(0).getId();
+
+        int candidate = 0;
+
+        while (repository.findByIdSafe(candidate).isPresent()) {
+            candidate++;
+        }
+
+        final int missingId = candidate;
+
+        System.out.println("\n--- Using map() ---");
+
+        String title = repository.findByIdSafe(existingId)
+                .map(Ticket::getTitle)
+                .orElse("Ticket not found");
+
+        System.out.println("Ticket title: " + title);
+
+        System.out.println("\n--- Using ifPresentOrElse() ---");
+
+        repository.findByIdSafe(missingId)
+                .ifPresentOrElse(
+                        ticket -> System.out.println("Found: " + ticket),
+                        () -> System.out.println("Ticket " + missingId + " not found")
+                );
+
+        try {
+            repository.findByIdSafe(missingId)
+                    .orElseThrow(() -> new TicketNotFoundException(missingId));
+
+        }
+        catch (TicketNotFoundException e) {
+            System.out.println("Expected exception: " + e.getMessage());
+        }
+    }
+
+    private static void demonstrateJsonSaveAndLoad(List<Ticket> tickets) throws IOException, InvalidTicketDataException {
+
+        System.out.println("\n========== JSON SAVE AND LOAD TEST ==========");
+
+        Path testFile = Path.of("test.json");
+
+        TicketJsonStore.save(tickets, testFile);
+
+        System.out.println("Tickets saved successfully.");
+
+        List<Ticket> loadedTickets = TicketJsonStore.load(testFile);
+
+        System.out.println("Tickets loaded successfully.");
+        System.out.println("Original count: " + tickets.size());
+        System.out.println("Loaded count: " + loadedTickets.size());
 
     }
 
@@ -328,7 +475,7 @@ class QueueDesk {
 
     private static void generateEndOfDayReport(List<Ticket> tickets) {
 
-        new TicketReport().generateReport(tickets);
+        TicketReport.generateReport(tickets);
 
     }
 

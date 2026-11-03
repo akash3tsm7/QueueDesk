@@ -1,11 +1,33 @@
 package com.akash.queuedesk.model;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(
+                value = BugTicket.class,
+                name = "bug"
+        ),
+        @JsonSubTypes.Type(
+                value = FeatureRequestTicket.class,
+                name = "feature"
+        ),
+        @JsonSubTypes.Type(
+                value = AccessRequestTicket.class,
+                name = "access"
+        )
+})
 public abstract class Ticket implements Comparable<Ticket>{
 
     private int id;
@@ -14,23 +36,25 @@ public abstract class Ticket implements Comparable<Ticket>{
     private String requester;
     private String assignee=null;
     private Set<String> tags=new HashSet<>();
-    private Priority priority;
-    private Status status;
+    private TicketPriority priority;
+    private TicketStatus status;
     private LocalDateTime createdAt;
     private static int nextId=1;
 
-    Ticket(String title,String description,String requester,Priority priority){
+    Ticket(){}
+
+    Ticket(String title, String description, String requester, TicketPriority priority){
         this.id=nextId++;
         this.title=title;
         this.description=description;
         this.requester=requester;
         this.priority=priority;
-        this.status=Status.OPEN;
+        this.status= TicketStatus.OPEN;
         this.createdAt=LocalDateTime.now();
     }
 
     Ticket(String title,String requester){
-        this(title,"",requester,Priority.MEDIUM);
+        this(title,"",requester, TicketPriority.MEDIUM);
     }
 
     public long ageInHours(){
@@ -63,11 +87,11 @@ public abstract class Ticket implements Comparable<Ticket>{
         return this.assignee;
     }
 
-    public Priority getPriority() {
+    public TicketPriority getPriority() {
         return this.priority;
     }
 
-    public Status getStatus() {
+    public TicketStatus getStatus() {
         return this.status;
     }
 
@@ -75,6 +99,11 @@ public abstract class Ticket implements Comparable<Ticket>{
         return this.createdAt;
     }
 
+    public Set<String> getTags(){
+
+        return this.tags;
+
+    }
     public void setDescription(String description) {
         validateDescription(description);
         this.description = description.trim();
@@ -86,12 +115,12 @@ public abstract class Ticket implements Comparable<Ticket>{
         }
     }
 
-    void setPriority(Priority priority) {
+    void setPriority(TicketPriority priority) {
         validateNotNull(priority, "Priority");
         this.priority = priority;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(TicketStatus status) {
         validateNotNull(status, "Status");
         this.status = status;
     }

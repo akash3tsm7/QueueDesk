@@ -5,7 +5,9 @@ public class FeatureRequestTicket extends Ticket{
     private int votes;
     private String businessJustification;
 
-    public FeatureRequestTicket(String title,String description,String requester,Priority priority,int votes,String businessJustification){
+    public FeatureRequestTicket(){}
+
+    public FeatureRequestTicket(String title, String description, String requester, TicketPriority priority, int votes, String businessJustification){
         super(title, description, requester, priority);
         this.votes = votes;
         this.businessJustification = businessJustification;

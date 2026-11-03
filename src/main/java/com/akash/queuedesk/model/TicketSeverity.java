@@ -1,16 +1,14 @@
 package com.akash.queuedesk.model;
 
-public enum Priority{
+public enum TicketSeverity {
 
-    LOW(0),
-    MEDIUM(1),
-    HIGH(2),
-    CRITICAL(4),
-    LESS_CRITICAL(3);
+    LOW(1),
+    MEDIUM(2),
+    HIGH(3);
 
     private int rank;
 
-    Priority(int rank){
+    TicketSeverity(int rank){
         this.rank = rank;
     }
 
@@ -18,6 +16,3 @@ public enum Priority{
         return this.rank;
     }
 }
-
-
-

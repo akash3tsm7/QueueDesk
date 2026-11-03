@@ -9,21 +9,21 @@ import java.util.List;
 import java.util.Map;
 
 import com.akash.queuedesk.model.Ticket;
-import com.akash.queuedesk.model.Status;
-import com.akash.queuedesk.model.Priority;
+import com.akash.queuedesk.model.TicketStatus;
+import com.akash.queuedesk.model.TicketPriority;
 
 public class TicketReport {
 
     private static final long CRITICAL_OVERDUE_HOURS = 24;
 
-    public void generateReport(List<Ticket> tickets) {
+    public static void generateReport(List<Ticket> tickets) {
 
         String reportContent = buildReportContent(tickets);
         writeReportToFile(reportContent);
 
     }
 
-    private String buildReportContent(List<Ticket> tickets) {
+    private static String buildReportContent(List<Ticket> tickets) {
 
         StringBuilder report = new StringBuilder();
         report.append("========== END-OF-DAY SUMMARY ==========\n\n");
@@ -36,42 +36,42 @@ public class TicketReport {
         return report.toString();
     }
 
-    private Map<Status, Integer> countByStatus(List<Ticket> tickets) {
-        Map<Status, Integer> statusCount = new HashMap<>();
+    private static Map<TicketStatus, Integer> countByStatus(List<Ticket> tickets) {
+        Map<TicketStatus, Integer> statusCount = new HashMap<>();
         for (Ticket ticket : tickets) {
-            Status status = ticket.getStatus();
+            TicketStatus status = ticket.getStatus();
             statusCount.put(status, statusCount.getOrDefault(status, 0) + 1);
         }
         return statusCount;
     }
 
-    private Map<Priority, Integer> countByPriority(List<Ticket> tickets) {
-        Map<Priority, Integer> priorityCount = new HashMap<>();
+    private static Map<TicketPriority, Integer> countByPriority(List<Ticket> tickets) {
+        Map<TicketPriority, Integer> priorityCount = new HashMap<>();
         for (Ticket ticket : tickets) {
-            Priority priority = ticket.getPriority();
+            TicketPriority priority = ticket.getPriority();
             priorityCount.put(priority, priorityCount.getOrDefault(priority, 0) + 1);
         }
         return priorityCount;
     }
 
-    private void appendStatusSummary(StringBuilder report, Map<Status, Integer> statusCount) {
+    private static void appendStatusSummary(StringBuilder report, Map<TicketStatus, Integer> statusCount) {
         report.append("Status Summary:\n");
-        for (Map.Entry<Status, Integer> entry : statusCount.entrySet()) {
+        for (Map.Entry<TicketStatus, Integer> entry : statusCount.entrySet()) {
             report.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
         }
     }
 
-    private void appendPrioritySummary(StringBuilder report, Map<Priority, Integer> priorityCount) {
+    private static void appendPrioritySummary(StringBuilder report, Map<TicketPriority, Integer> priorityCount) {
         report.append("\nPriority Summary:\n");
-        for (Map.Entry<Priority, Integer> entry : priorityCount.entrySet()) {
+        for (Map.Entry<TicketPriority, Integer> entry : priorityCount.entrySet()) {
             report.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
         }
     }
 
-    private Ticket findOldestOpenTicket(List<Ticket> tickets) {
+    private static Ticket findOldestOpenTicket(List<Ticket> tickets) {
         Ticket oldest = null;
         for (Ticket ticket : tickets) {
-            if (ticket.getStatus() == Status.OPEN) {
+            if (ticket.getStatus() == TicketStatus.OPEN) {
                 if (oldest == null || ticket.getCreatedAt().isBefore(oldest.getCreatedAt())) {
                     oldest = ticket;
                 }
@@ -80,12 +80,12 @@ public class TicketReport {
         return oldest;
     }
 
-    private void appendOldestOpenTicket(StringBuilder report, Ticket oldest) {
+    private static void appendOldestOpenTicket(StringBuilder report, Ticket oldest) {
         report.append("\nOldest OPEN Ticket:\n");
         report.append(oldest != null ? oldest.toString() : "No open tickets.").append("\n");
     }
 
-    private void appendOverdueCriticalTickets(StringBuilder report, List<Ticket> tickets) {
+    private static void appendOverdueCriticalTickets(StringBuilder report, List<Ticket> tickets) {
 
         report.append("\nOverdue CRITICAL Tickets:\n");
         boolean foundOverdue = false;
@@ -99,11 +99,11 @@ public class TicketReport {
 
     }
 
-    private void appendOverdueTicketLine(StringBuilder report, Ticket ticket) {
+    private static void appendOverdueTicketLine(StringBuilder report, Ticket ticket) {
         report.append("ID: ").append(ticket.getId()).append(" | Title: ").append(ticket.getTitle()).append(" | Status: ").append(ticket.getStatus()).append(" | Age: ").append(ticket.ageInHours()).append(" hours\n");
     }
 
-    private void writeReportToFile(String content) {
+    private static void writeReportToFile(String content) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("report.txt"))) {
             writer.write(content);
             System.out.println("Report generated successfully: report.txt");
@@ -112,11 +112,11 @@ public class TicketReport {
         }
     }
 
-    private boolean isOverdueCritical(Ticket ticket) {
+    private static boolean isOverdueCritical(Ticket ticket) {
 
-        Status status = ticket.getStatus();
+        TicketStatus status = ticket.getStatus();
 
-        return ticket.getPriority() == Priority.CRITICAL && status != Status.RESOLVED && status != Status.CLOSED && ticket.ageInHours() >= CRITICAL_OVERDUE_HOURS;
+        return ticket.getPriority() == TicketPriority.CRITICAL && status != TicketStatus.RESOLVED && status != TicketStatus.CLOSED && ticket.ageInHours() >= CRITICAL_OVERDUE_HOURS;
     }
 
 }

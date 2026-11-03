@@ -13,7 +13,7 @@ public class TicketTriageQueue {
 
     public void registerQueue(String queueName , Comparator<Ticket> comparator){
 
-        PriorityQueue<Ticket> queue = (queueName == null) ? new PriorityQueue<>() : new PriorityQueue<>(comparator);
+        PriorityQueue<Ticket> queue = (queueName == null || queueName == "") ? new PriorityQueue<>() : new PriorityQueue<>(comparator);
 
         queues.put(queueName, queue);
     }

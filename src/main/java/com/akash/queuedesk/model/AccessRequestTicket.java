@@ -1,12 +1,16 @@
 package com.akash.queuedesk.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class AccessRequestTicket extends Ticket implements Escalatable{
 
     private String systemName;
     private String accessLevel;
     private EscalatableSupport escalationSupport = new EscalatableSupport();
 
-    public AccessRequestTicket(String title,String description,String requester, Priority priority,String systemName, String accessLevel){
+    public AccessRequestTicket(){}
+
+    public AccessRequestTicket(String title, String description, String requester, TicketPriority priority, String systemName, String accessLevel){
         super(title, description, requester, priority);
         this.systemName = systemName;
         this.accessLevel = accessLevel;
@@ -33,6 +37,7 @@ public class AccessRequestTicket extends Ticket implements Escalatable{
         escalationSupport.escalate();
     }
 
+    @JsonIgnore
     @Override
     public boolean isEscalated(){
         return escalationSupport.isEscalated();

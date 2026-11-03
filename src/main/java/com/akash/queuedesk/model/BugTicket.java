@@ -1,18 +1,22 @@
 package com.akash.queuedesk.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class BugTicket extends Ticket implements Escalatable{
 
-    private Severity severity;
+    private TicketSeverity severity;
     private String stepsToReproduce;
     private EscalatableSupport escalationSupport = new EscalatableSupport();
 
-    public BugTicket(String title,String description,String requester,Priority priority,Severity severity,String stepsToReproduce){
+    public BugTicket(){}
+
+    public BugTicket(String title, String description, String requester, TicketPriority priority, TicketSeverity severity, String stepsToReproduce){
         super(title, description, requester, priority);
         this.severity = severity;
         this.stepsToReproduce = stepsToReproduce;
     }
 
-    public Severity getSeverity(){
+    public TicketSeverity getSeverity(){
         return this.severity;
     }
 
@@ -39,6 +43,7 @@ public class BugTicket extends Ticket implements Escalatable{
         escalationSupport.escalate();
     }
 
+    @JsonIgnore
     @Override
     public boolean isEscalated(){
         return escalationSupport.isEscalated();
