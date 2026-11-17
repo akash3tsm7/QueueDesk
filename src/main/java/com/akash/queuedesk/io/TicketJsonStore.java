@@ -4,8 +4,9 @@ import java.util.List;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import com.akash.queuedesk.config.TicketJsonConfig;
 import com.akash.queuedesk.exception.InvalidTicketDataException;
-import com.akash.queuedesk.model.Ticket;
+import com.akash.queuedesk.entity.Ticket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -8,14 +8,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.akash.queuedesk.analytics.TicketAnalytics;
+import com.akash.queuedesk.service.TicketAnalytics;
 import com.akash.queuedesk.exception.TicketNotFoundException;
 import com.akash.queuedesk.io.TicketJsonStore;
-import com.akash.queuedesk.model.Ticket;
-import com.akash.queuedesk.model.BugTicket;
-import com.akash.queuedesk.model.FeatureRequestTicket;
-import com.akash.queuedesk.model.AccessRequestTicket;
-import com.akash.queuedesk.model.Escalatable;
+import com.akash.queuedesk.entity.Ticket;
+import com.akash.queuedesk.entity.BugTicket;
+import com.akash.queuedesk.entity.FeatureRequestTicket;
+import com.akash.queuedesk.entity.AccessRequestTicket;
+import com.akash.queuedesk.entity.Escalatable;
 
 import com.akash.queuedesk.repository.Repository;
 
@@ -24,10 +24,10 @@ import com.akash.queuedesk.exception.InvalidTicketDataException;
 import com.akash.queuedesk.io.TicketFileLoader;
 import com.akash.queuedesk.io.TicketReport;
 
-import com.akash.queuedesk.triage.TriageBoard;
-import com.akash.queuedesk.triage.TicketTriageQueue;
+import com.akash.queuedesk.service.triage.TriageBoard;
+import com.akash.queuedesk.service.triage.TicketTriageQueue;
 
-import com.akash.queuedesk.comparator.TicketComparators;
+import com.akash.queuedesk.util.comparator.TicketComparators;
 
 class QueueDesk {
 

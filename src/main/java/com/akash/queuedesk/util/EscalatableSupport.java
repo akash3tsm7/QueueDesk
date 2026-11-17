@@ -1,18 +1,18 @@
-package com.akash.queuedesk.model;
+package com.akash.queuedesk.util;
 
 public class EscalatableSupport {
 
     private int escalationLevel = 0;
 
-    void escalate() {
+    public void escalate() {
         escalationLevel++;
     }
 
-    boolean isEscalated() {
+    public boolean isEscalated() {
         return escalationLevel > 0;
     }
 
-    int escalationLevel() {
+    public int escalationLevel() {
         return escalationLevel;
     }
 }

@@ -1,4 +1,4 @@
-package com.akash.queuedesk.analytics;
+package com.akash.queuedesk.service;
 
 import java.util.List;
 import java.util.Map;
@@ -7,9 +7,9 @@ import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 import java.util.Comparator;
 
-import com.akash.queuedesk.model.TicketStatus;
-import com.akash.queuedesk.model.Ticket;
-import com.akash.queuedesk.model.TicketPriority;
+import com.akash.queuedesk.constants.TicketStatus;
+import com.akash.queuedesk.entity.Ticket;
+import com.akash.queuedesk.constants.TicketPriority;
 
 public class TicketAnalytics {
 

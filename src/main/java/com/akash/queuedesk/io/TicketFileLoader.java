@@ -11,13 +11,13 @@ import java.util.Set;
 
 import com.akash.queuedesk.exception.InvalidTicketDataException;
 
-import com.akash.queuedesk.model.Ticket;
-import com.akash.queuedesk.model.TicketPriority;
-import com.akash.queuedesk.model.TicketStatus;
-import com.akash.queuedesk.model.TicketSeverity;
-import com.akash.queuedesk.model.BugTicket;
-import com.akash.queuedesk.model.FeatureRequestTicket;
-import com.akash.queuedesk.model.AccessRequestTicket;
+import com.akash.queuedesk.entity.Ticket;
+import com.akash.queuedesk.constants.TicketPriority;
+import com.akash.queuedesk.constants.TicketStatus;
+import com.akash.queuedesk.constants.TicketSeverity;
+import com.akash.queuedesk.entity.BugTicket;
+import com.akash.queuedesk.entity.FeatureRequestTicket;
+import com.akash.queuedesk.entity.AccessRequestTicket;
 
 public class TicketFileLoader{
 

@@ -1,5 +1,7 @@
-package com.akash.queuedesk.model;
+package com.akash.queuedesk.entity;
 
+import com.akash.queuedesk.constants.TicketPriority;
+import com.akash.queuedesk.constants.TicketStatus;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 

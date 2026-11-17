@@ -1,6 +1,8 @@
-package com.akash.queuedesk.model;
+package com.akash.queuedesk.entity;
 
-public class FeatureRequestTicket extends Ticket{
+import com.akash.queuedesk.constants.TicketPriority;
+
+public class FeatureRequestTicket extends Ticket {
 
     private int votes;
     private String businessJustification;

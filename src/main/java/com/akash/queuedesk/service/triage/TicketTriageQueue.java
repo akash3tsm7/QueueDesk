@@ -1,11 +1,11 @@
-package com.akash.queuedesk.triage;
+package com.akash.queuedesk.service.triage;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Comparator;
 
-import com.akash.queuedesk.model.Ticket;
+import com.akash.queuedesk.entity.Ticket;
 
 public class TicketTriageQueue {
 

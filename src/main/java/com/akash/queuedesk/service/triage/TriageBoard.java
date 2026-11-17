@@ -1,9 +1,9 @@
-package com.akash.queuedesk.triage;
+package com.akash.queuedesk.service.triage;
 
 import java.util.List;
 
-import com.akash.queuedesk.model.Ticket;
-import com.akash.queuedesk.model.Escalatable;
+import com.akash.queuedesk.entity.Ticket;
+import com.akash.queuedesk.entity.Escalatable;
 
 public class TriageBoard {
 

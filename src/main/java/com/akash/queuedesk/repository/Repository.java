@@ -2,7 +2,7 @@ package com.akash.queuedesk.repository;
 
 import java.util.*;
 
-import com.akash.queuedesk.model.Ticket;
+import com.akash.queuedesk.entity.Ticket;
 import com.akash.queuedesk.exception.TicketNotFoundException;
 
 public class Repository<T extends Ticket>{

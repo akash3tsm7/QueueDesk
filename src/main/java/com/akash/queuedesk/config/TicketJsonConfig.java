@@ -1,4 +1,4 @@
-package com.akash.queuedesk.io;
+package com.akash.queuedesk.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

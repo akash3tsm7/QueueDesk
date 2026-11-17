@@ -1,5 +1,7 @@
-package com.akash.queuedesk.model;
+package com.akash.queuedesk.entity;
 
+import com.akash.queuedesk.constants.TicketPriority;
+import com.akash.queuedesk.util.EscalatableSupport;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class AccessRequestTicket extends Ticket implements Escalatable{

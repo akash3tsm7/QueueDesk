@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.akash.queuedesk.model.Ticket;
-import com.akash.queuedesk.model.TicketStatus;
-import com.akash.queuedesk.model.TicketPriority;
+import com.akash.queuedesk.entity.Ticket;
+import com.akash.queuedesk.constants.TicketStatus;
+import com.akash.queuedesk.constants.TicketPriority;
 
 public class TicketReport {
 

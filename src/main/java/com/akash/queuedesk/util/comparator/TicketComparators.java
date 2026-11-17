@@ -1,8 +1,8 @@
-package com.akash.queuedesk.comparator;
+package com.akash.queuedesk.util.comparator;
 
 import java.util.Comparator;
 
-import com.akash.queuedesk.model.Ticket;
+import com.akash.queuedesk.entity.Ticket;
 
 public class TicketComparators {
 

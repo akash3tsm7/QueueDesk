@@ -1,4 +1,4 @@
-package com.akash.queuedesk.model;
+package com.akash.queuedesk.constants;
 
 public enum TicketPriority {
 
